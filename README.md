@@ -3,7 +3,7 @@
 **Usync** is a site-to-site synchronization program written in
 [Scsh](http://www.scsh.net). It makes use of
 [unison](http://www.cis.upenn.edu/~bcpierce/unison/), and
-[rsync](https://rsync.samba.org/), for bi-directional, and
+[rsync](https://rsync.samba.org/), for bi- and
 uni-directional synchronization, respectively.
 
 # Basic Usage
