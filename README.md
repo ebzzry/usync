@@ -22,3 +22,8 @@ For more usage help, run:
 ```
 usync --help
 ```
+
+# Caveats
+
+0. This program has been used on FreeBSD, hence making the shebang
+line contain `/usr/local/bin/scsh`. Please change it, appropriately.
