@@ -435,8 +435,7 @@ Options:
 
 ;; initialize hash tables
 (define (init-tables)
-  (init-opt-table)
-  (init-ignore-table))
+  (init-opt-table))
 
 ;; internal
 (define (%main args)
