@@ -1,6 +1,6 @@
 # Introduction
 
-**Usync** is a site-to-site synchronization program written in
+__Usync__ is a site-to-site synchronization program written in
 [Scsh](http://www.scsh.net). It makes use of
 [unison](http://www.cis.upenn.edu/~bcpierce/unison/), and
 [rsync](https://rsync.samba.org/), for bi- and
