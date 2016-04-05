@@ -1,5 +1,6 @@
-#! /usr/local/bin/scsh \
--e main -o table -s
+#!/bin/sh
+# -*- mode: scheme -*-
+exec /usr/bin/env scsh -o tables -e main -s "$0" "$@" 2> /dev/null
 !#
 
 (define debug #f)
@@ -108,25 +109,25 @@
         ((not (pair? x)) (list x))
         (else (append (flatten (car x))
                       (flatten (cdr x))))))
-;; main
 
+;; main
 (define (display-usage)
   (let ((self (file-name-nondirectory (car (opt-ref 'arguments)))))
     (format #t
             "Usage: ~A [OPTION...] FILE... HOST[,HOST...]
 
-Arguments:
+ARGUMENTS:
   FILE                          file or directory
   HOST                          CSV list of hosts
 
-Options:
+OPTIONS:
   -h,  --help                   show this help
   -l,  --log                    record actions in --logfile option
        --logfile FILE           specify log file name
   -s,  --silent                 print nothing, except error messages
   -m,  --manual                 enable manual mode
   -n,  --dry-run                simulate command execution.
-       --oneway                 use one-way synchronization using rsync 
+       --oneway                 use one-way synchronization using rsync
        --twoway                 use two-way synchronization using unison (default)
   -e,  --protocol PROTOCOL      specify the transfer protocol to use
        --prefer ROOT            specify root to prefer
@@ -190,23 +191,11 @@ Options:
          `((primary . ())
            (secondary . ())
            (regex
-            . (".*(cache|Cache|te?mp|history|thumbnails).*"
-               ".*.[mM][pP]."
-               ".*.[aA][vV][iI]" ".*.[wW][eE][bB][mM]"
-               ".*.[eE][xX][eE]" ".*.[iI][sS][oO]"
-               ".*.[fF][lL][vV]" ".*.[fF][lL][aA][cC]"
-               ".*.[mM][kK][vV]"))
+            . (".*(cache|Cache|te?mp|history|thumbnails).*"))
            (name
             . ("unison.log" ".ICEauthority" ".Xauthority"
-               "*.core" ".serverauth*" ".thunderbird" ".mozilla"
-               ".linux-opera" ".opera" ".macromedia" ".adobe"
-               ".gconf*" ".gnome*" ".kde*" ".gimp*" ".fox*"
-               ".gtk*" ".gstreamer*"
-               ".evolution" ".config" ".icewm" ".wine"
-               ".openoffice*" "OpenOffice.org*" ".java"
-               ".nautilus" "*.lock" ".xchat*" ".xfetrash"
-               ".mcop*" ".DCOP*" ".emacs-backups" ".emacs-auto-save"
-               ".dbus" ".gvfs" ".gegl*" ".font" ".local*"
+               "*.core" ".serverauth*" "*.lock"
+               ".mcop*" ".DCOP*" ".dbus" ".gvfs" ".gegl*" ".local*"
                "*.nosync" "*__"))
            (path
             . (".unison" ".Trash" "Trash" ".nfs*" "socket-*"
@@ -269,7 +258,7 @@ Options:
                        (cadr args))
         (ignore-ref key)))
 
-;; Map ignore type to correspinding -ignore string
+;; map ignore type to correspinding -ignore string
 (define (ignore->string type)
   (case type
     ((regex) "Regex ")
@@ -352,7 +341,7 @@ Options:
 (define (brainwash hosts)
   (for-each (lambda (host)
               (print-run `(,(opt-ref 'protocol)
-                           ,host "sudo rm -rf /root/.unison/ar*")))
+                           ,host ,(string-append "rm -rf " (home-dir) "/.unison/ar*"))))
             hosts)
   (exit 0))
 
@@ -459,7 +448,8 @@ Options:
   (if (>= (length args) 3)
       (begin
         (opt-set! 'program-name (car args))
-        (opt-set! 'logfile (build-logfile "/root"))
+        (opt-set! 'logfile (build-logfile
+                            (string-append (home-dir) "/.usync")))
         (%main args))
       (begin
         (display-usage-exit 0))))

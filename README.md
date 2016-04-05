@@ -1,4 +1,8 @@
-# Introduction
+Usync
+=====
+
+Introduction
+------------
 
 __Usync__ is a site-to-site synchronization program written in
 [Scsh](http://www.scsh.net). It makes use of
@@ -6,7 +10,8 @@ __Usync__ is a site-to-site synchronization program written in
 [rsync](https://rsync.samba.org/), for bi- and
 uni-directional synchronizations, respectively.
 
-# Basic Usage
+Basic usage
+-----------
 
 To perform two-way synchronization of the directory `/pub/yot/ninam`,
 between the current host, to the hosts `tarupam`, and `taubetmo`,
@@ -33,7 +38,8 @@ Ideally, the result is that `localhost:/pub/yot/ninam/`,
 equal.
 
 
-# Semi-advanced Usage
+Semi-advanced usage
+-------------------
 
 It is also possible to perform synchronization of multiple files, and
 directories, to remote hosts. To do so, run:
@@ -59,8 +65,3 @@ For more usage information, run:
 ```
 usync --help
 ```
-
-# Caveats
-
-0. This program has been used on FreeBSD, hence making the shebang
-line contain `/usr/local/bin/scsh`. Please change it, accordingly.
