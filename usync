@@ -116,29 +116,29 @@ exec /usr/bin/env scsh -o tables -e main -s "$0" "$@" 2> /dev/null
     (format #t
             "Usage: ~A [OPTION...] FILE... HOST[,HOST...]
 
-ARGUMENTS:
-  FILE                          file or directory
-  HOST                          CSV list of hosts
+Arguments:
+  FILE                      file or directory
+  HOST                      CSV list of hosts
 
-OPTIONS:
-  -h,  --help                   show this help
-  -l,  --log                    record actions in --logfile option
-       --logfile FILE           specify log file name
-  -s,  --silent                 print nothing, except error messages
-  -m,  --manual                 enable manual mode
-  -n,  --dry-run                simulate command execution.
-       --oneway                 use one-way synchronization using rsync
-       --twoway                 use two-way synchronization using unison (default)
-  -e,  --protocol PROTOCOL      specify the transfer protocol to use
-       --prefer ROOT            specify root to prefer
-       --prefer-local           prefer local version of tree
-       --prefer-remote          prefer remote version of tree
-       --ignore PATHSPEC        specify ignore pathspec
-       --ignore-regex REGEX     specify a regex ignore pathspec
-       --ignore-name NAME       specify a name ignore pathspec
-       --ignore-path PATH       specify a path ignore pathspec
-       --noignore               do not ignore any file
-       --brainwash HOSTS        delete metadata stored on HOSTS
+Options:
+  -h, --help               show this help
+  -l, --log                record actions in --logfile option
+      --logfile FILE       specify log file name
+  -s, --silent             print nothing, except error messages
+  -m, --manual             enable manual mode
+  -n, --dry-run            simulate command execution.
+      --oneway             use one-way synchronization using rsync
+      --twoway             use two-way synchronization using unison (default)
+  -e, --protocol PROTOCOL  specify the transfer protocol to use
+      --prefer ROOT        specify root to prefer
+      --prefer-local       prefer local version of tree
+      --prefer-remote      prefer remote version of tree
+      --ignore PATHSPEC    specify ignore pathspec
+      --ignore-regex REGEX specify a regex ignore pathspec
+      --ignore-name NAME   specify a name ignore pathspec
+      --ignore-path PATH   specify a path ignore pathspec
+      --noignore           do not ignore any file
+      --brainwash HOSTS    delete metadata stored on HOSTS
 " self)))
 
 ;; print the help summary then exit with exit-code
@@ -193,13 +193,9 @@ OPTIONS:
            (regex
             . (".*(cache|Cache|te?mp|history|thumbnails).*"))
            (name
-            . ("unison.log" ".ICEauthority" ".Xauthority"
-               "*.core" ".serverauth*" "*.lock"
-               ".mcop*" ".DCOP*" ".dbus" ".gvfs" ".gegl*" ".local*"
-               "*.nosync" "*__"))
+            . ("*.nousync" "*__"))
            (path
-            . (".unison" ".Trash" "Trash" ".nfs*" "socket-*"
-               ".emacs.d/auto-save-list")))))
+            . (".nfs*" "socket-*")))))
     (do ((x table (cdr x)))
         ((null? x) x)
       (ignore-set! (caar x) (cdar x)))))
