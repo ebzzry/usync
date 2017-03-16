@@ -19,8 +19,8 @@ while preserving the directory structure remotely (take note, that
 there must be no spaces between the hosts specification, due to the
 IFS environment variable, found in most shells):
 
-```
-usync /pub/yot/ninam/ tarupam,taubetmo
+```bash
+$ usync /pub/yot/ninam/ tarupam,taubetmo
 ```
 
 The command above will perform two-way synchronization of the diretory
@@ -38,14 +38,14 @@ Ideally, the result is that `localhost:/pub/yot/ninam/`,
 equal.
 
 
-Semi-advanced usage
+Advanced usage
 -------------------
 
 It is also possible to perform synchronization of multiple files, and
 directories, to remote hosts. To do so, run:
 
-```
-usync /pub/yot/ninam/ ~/file.text ~reyn/*.blend tarupam,taubetmo
+```bash
+$ usync /pub/yot/ninam/ ~/file.text ~reyn/*.blend tarupam,taubetmo
 ```
 
 The command above will perform two-way synchronization of the paths
@@ -56,12 +56,12 @@ structuring system described above.
 If you want to perform one-way synchronization, of the above, like
 `rsync`, run:
 
-```
-usync --one-way --prefer-local /pub/yot/ninam/ ~/file.text ~reyn/draft.blend tarupam,taubetmo
+```bash
+$ usync --one-way --prefer-local /pub/yot/ninam/ ~/file.text ~reyn/draft.blend tarupam,taubetmo
 ```
 
 For more usage information, run:
 
-```
-usync --help
+```bash
+$ usync --help
 ```
