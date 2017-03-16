@@ -39,7 +39,7 @@ equal.
 
 
 Advanced usage
--------------------
+--------------
 
 It is also possible to perform synchronization of multiple files, and
 directories, to remote hosts. To do so, run:
