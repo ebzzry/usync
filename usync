@@ -142,7 +142,8 @@ Options:
   -v, --verbose            enable verbose output
   -V, --version            display program version
   -h, --help               show this help
-" self)))
+
+See https://github.com/ebzzry/usync for more information~%" self)))
 
 ;; print the help summary then exit with code
 (define (display-usage-exit code)
