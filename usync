@@ -10,7 +10,7 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
   (open (subset srfi-13 (string-null?)))
 
   (begin
-    (define version "0.0.3")
+    (define version "0.0.4")
 
     (define debug #f)
 
@@ -136,7 +136,6 @@ Options:
   -n, --dry-run            simulate command execution.
   -1, --oneway             use one-way synchronization using rsync
   -2, --twoway             use two-way synchronization using unison (default)
-  -e, --protocol PROTOCOL  specify the transfer protocol to use
   -F, --prefer ROOT        specify root to prefer
   -L, --prefer-local       prefer local version of tree
   -R, --prefer-remote      prefer remote version of tree
@@ -342,7 +341,7 @@ See https://github.com/ebzzry/usync for more information~%" self)))
     (define (rsync-tree src dest)
       (let* ((default-options
                `("--archive" "--verbose" "--compress"
-                 "--delete" "-e" ,(opt-ref 'protocol)))
+                 "--delete" "-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
              (from (list (path-qualify dest src 'src)))
              (to (list (path-qualify dest src 'dest))))
         (print-run `(rsync ,@(append default-options from to)))))
