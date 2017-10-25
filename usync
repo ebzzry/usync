@@ -10,7 +10,7 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
   (open (subset srfi-13 (string-null?)))
 
   (begin
-    (define version "0.0.2")
+    (define version "0.0.3")
 
     (define debug #f)
 
@@ -21,7 +21,7 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
       (define (inc n)
         (+ n 1))
 
-      ;; maxsplit is a positive number
+      ;;; maxsplit is a positive number
       (define (split-by-whitespace str maxsplit)
         (define (skip-ws i yet-to-split-count)
           (cond
@@ -44,7 +44,7 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
            (else (scan-word (inc i) from yet-to-split-count))))
         (skip-ws 0 (- maxsplit 1)))
 
-      ;; str is not empty
+      ;;; str is not empty
       (define (split-by-charset str delimeters maxsplit)
         (define (scan-beg-word from yet-to-split-count)
           (cond
@@ -62,9 +62,9 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
            (else (scan-word (inc i) from yet-to-split-count))))
         (scan-beg-word 0 (- maxsplit 1)))
 
-      ;; resolver of overloading...
-      ;; if omitted, maxsplit defaults to
-      ;; (inc (string-length str))
+      ;;; resolver of overloading...
+      ;;; if omitted, maxsplit defaults to
+      ;;; (inc (string-length str))
       (if (string-null? str) '()
           (if (null? rest)
               (split-by-whitespace str (inc (string-length str)))
@@ -76,8 +76,8 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
                  ((null? charset) (split-by-whitespace str maxsplit))
                  (else (split-by-charset str charset maxsplit)))))))
 
-;;; doublequote items in a list
-;;; (quote-list '(foo bar baz) => '("foo" "bar" "baz")
+     ;;; doublequote items in a list
+     ;;; (quote-list '(foo bar baz) => '("foo" "bar" "baz")
     (define (quote-list list)
       (map (lambda (item)
              (string-append
@@ -87,8 +87,8 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
               ""))
            list))
 
-;;; join strings in a list
-;;; (strings-join '("foo" "bar" "baz") => "foobarbaz"
+    ;;; join strings in a list
+    ;;; (strings-join '("foo" "bar" "baz") => "foobarbaz"
     (define (strings-join list)
       (cond ((null? list) "")
             (else (string-append
@@ -97,28 +97,28 @@ exec /usr/bin/env scsh -dm -m usync -e main -s "$0" "$@"
                        "" " ")
                    (strings-join (cdr list))))))
 
-;;; split a string using comma as a delimiter
+    ;;; split a string using comma as a delimiter
     (define (string-split/comma s)
       (string-split s '(#\,)))
 
-;;; outputs input -- for debugging use
+    ;;; outputs input -- for debugging use
     (define (fake-run x) (format #t "~A~%" x))
 
-;;; print command to execute then execute command
+    ;;; print command to execute then execute command
     (define (print-run command . quiet)
       (let ((form (strings-join (quote-list command))))
         (if (opt-ref 'fake-run)
             (fake-run form)
             (run (,@command)))))
 
-;;; flatten a list
+    ;;; flatten a list
     (define (flatten x)
       (cond ((null? x) '())
             ((not (pair? x)) (list x))
             (else (append (flatten (car x))
                           (flatten (cdr x))))))
 
-;;; main
+    ;;; display help
     (define (display-usage)
       (let ((self (file-name-nondirectory (car (opt-ref 'arguments)))))
         (format #t
@@ -152,21 +152,21 @@ Options:
 
 See https://github.com/ebzzry/usync for more information~%" self)))
 
-;;; print the help summary then exit with code
+    ;;; print the help summary then exit with code
     (define (display-usage-exit code)
       (display-usage)
       (exit code))
 
-;;; print the program version
+    ;;; print the program version
     (define (display-version)
       (format #t "~A~%" version))
 
-;;; print the program version then exit with exit code
+    ;;; print the program version then exit with exit code
     (define (display-version-exit code)
       (display-version)
       (exit code))
 
-;;; create hash tables and helpers
+    ;;; hash tables and helpers
     (define opt-table (make-table))
     (define (opt-set! key value)
       (table-set! opt-table key value))
@@ -178,7 +178,7 @@ See https://github.com/ebzzry/usync for more information~%" self)))
     (define (ignore-ref key)
       (table-ref ignore-table key))
 
-;;; initialize option table
+    ;;; initialize option table
     (define (init-opt-table)
       (let ((table
              `((print-run . #f)
@@ -221,11 +221,11 @@ See https://github.com/ebzzry/usync for more information~%" self)))
             ((null? x) x)
           (ignore-set! (caar x) (cdar x)))))
 
-;;; qualify path for unison format
+    ;;; qualify path for unison format
     (define (host-qualify-sync-tree host tree)
       (string-append (opt-ref 'protocol) "://" host "/" tree))
 
-;;; qualify path for rsync format
+    ;;; qualify path for rsync format
     (define (host-qualify-rsync-tree host tree)
       (string-append host ":" tree))
 
@@ -245,19 +245,19 @@ See https://github.com/ebzzry/usync for more information~%" self)))
            ((1 'remote)
             (file-name-directory tree))))))
 
-;;; remove trailing slash in directories
+    ;;; remove trailing slash in directories
     (define (strip-slash path)
       (if (file-directory? path)
           (directory-as-file-name path)
           path))
 
-;;; default logfile
+    ;;; default logfile
     (define (build-logfile base)
       (string-append
        base
        "/" (file-name-nondirectory (opt-ref 'program-name)) ".log"))
 
-;;; build options for unison mode
+    ;;; build options for unison mode
     (define (build-other-options-sync-tree tree dest)
       (list (if (not (opt-ref 'manual)) "-batch" #f)
             (and (opt-ref 'log) "-log")
@@ -269,20 +269,20 @@ See https://github.com/ebzzry/usync for more information~%" self)))
             (and (opt-ref 'prefer-remote) `("-prefer" ,dest))
             (and (opt-ref 'verbose) `("-debug" "verbose"))))
 
-;;; creates a pair for parse-args use for --ignore-* options
+    ;;; creates a pair for parse-args use for --ignore-* options
     (define (ignore-insert type key args)
       (cons (string-append (ignore->string type)
                            (cadr args))
             (ignore-ref key)))
 
-;;; map ignore type to corresponding -ignore string
+    ;;; map ignore type to corresponding -ignore string
     (define (ignore->string type)
       (case type
         ((regex) "Regex ")
         ((name) "Name ")
         ((path) "Path ")))
 
-;;; build ignores (built-in rules)
+    ;;; build ignores (built-in rules)
     (define (build-ignore-options-builtin type)
       (format #t "build-ignore-options-builtin~%")
       (format #t "type: ~A~%" type)
@@ -297,7 +297,7 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                                              (car lst)))
                         acc))))))
 
-;;; build ignore options (command line)
+    ;;; build ignore options (command line)
     (define (build-ignore-options-user key)
       (let ((ignore (ignore-ref key)))
         (if (> (length ignore) 0)
@@ -305,11 +305,11 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                  (reverse ignore))
             '())))
 
-;;; remove empty options
+    ;;; remove empty options
     (define (sanitize options)
       (remove (lambda (i) (not i)) options))
 
-;;; synchronize path with host
+    ;;; synchronize path with host
     (define (sync-tree src dest)
       (let ((default-options
               '("-rsync"
@@ -337,8 +337,8 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                                           ignore-options))
                             ,src ,dest))))
 
-;;; synchonize src to dest using rsync with delete
-;;; rsyncmode: specify correct src and dest here
+    ;;; synchonize src to dest using rsync with delete
+    ;;; rsyncmode: specify correct src and dest here
     (define (rsync-tree src dest)
       (let* ((default-options
                `("--archive" "--verbose" "--compress"
@@ -347,8 +347,8 @@ See https://github.com/ebzzry/usync for more information~%" self)))
              (to (list (path-qualify dest src 'dest))))
         (print-run `(rsync ,@(append default-options from to)))))
 
-;;; synchronize tree with hosts
-;;; rsyncmode: specify correct src and dest here
+    ;;; synchronize tree with hosts
+    ;;; rsyncmode: specify correct src and dest here
     (define (sync-hosts src dest)
       (let ((path (strip-slash (absolute-file-name src))))
         (for-each (lambda (dst)
@@ -359,7 +359,7 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                         (sync-tree path (host-qualify-sync-tree dst path))))
                   dest)))
 
-;;; delete archive files on hosts
+    ;;; delete archive files on hosts
     (define (brainwash hosts)
       (for-each (lambda (host)
                   (print-run `(,(opt-ref 'protocol)
@@ -367,7 +367,7 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                 hosts)
       (exit 0))
 
-;;; primary argument parser
+    ;;; primary argument parser
     (define (parse-args args)
       (cond ((null? args) args)
             (else (case (string->symbol (car args))
@@ -446,11 +446,11 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                             (opt-set! 'hosts (string-split/comma (last args)))
                             blast))))))
 
-;;; initialize hash tables
+    ;;; initialize hash tables
     (define (init-tables)
       (init-opt-table))
 
-;;; internal
+    ;;; internal
     (define (launch args)
       (let ((tree (parse-args (cdr args))))
         (cond
@@ -465,13 +465,13 @@ See https://github.com/ebzzry/usync for more information~%" self)))
                           (display-usage-exit 1)))
                     tree)))))
 
-;;; define initial settings
+    ;;; define initial settings
     (define (set-parameters args)
       (opt-set! 'arguments args)
       (opt-set! 'program-name (car args))
       (opt-set! 'logfile (build-logfile (string-append (home-dir) "/.usync"))))
 
-;;; entry point
+    ;;; entry point
     (define (main args)
       (init-tables)
       (set-parameters args)
