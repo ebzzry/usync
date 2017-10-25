@@ -1,6 +1,6 @@
 #!/bin/sh
 # -*- mode: scheme -*-
-exec /usr/bin/env scsh -o tables -e main -s "$0" "$@"
+exec /usr/bin/env scsh -o tables -e main -s "$0" "$@" 2> /dev/null
 !#
 
 (define version "0.0.2")
