@@ -83,3 +83,10 @@ If you want to perform one-way synchronization, of the above, like
 For more usage information, run:
 
     $ usync --help
+
+
+Credits
+-------
+
+Thanks to [Riastradh](http://community.schemewiki.org/?Riastradh) for helping me with Scheme48’s
+module system.
